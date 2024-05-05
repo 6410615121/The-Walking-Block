@@ -17,7 +17,7 @@ public class GridPanel{
 
     public GridPanel(){
         jframe = new JFrame();
-        jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setSize(400, 400);
         // jframe.setResizable(false);
         jframe.setLocationRelativeTo(null);
@@ -27,7 +27,7 @@ public class GridPanel{
         jframe.setLayout(grid);
         
         // create cells with gridSize
-        JPanel[][] cellPanels = new JPanel[gridSize][gridSize]; // 
+        cellPanels = new JPanel[gridSize][gridSize]; // 
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 JPanel cellPanel = createCellPanel();
@@ -43,6 +43,10 @@ public class GridPanel{
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return panel;
+    }
+
+    public JPanel[][] getCellPanels(){
+        return cellPanels;
     }
 
     // @Override
