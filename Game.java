@@ -40,16 +40,16 @@ public class Game implements KeyListener {
 
         if (keyCode == KeyEvent.VK_UP) {
             System.out.println("W key pressed");
-            snakes[1].moveUp();
+            snakes[1].direction = "up";
         } else if (keyCode == KeyEvent.VK_LEFT) {
             System.out.println("A key pressed");
-            snakes[1].moveLeft();
+            snakes[1].direction = "left";
         } else if (keyCode == KeyEvent.VK_RIGHT) {
             System.out.println("S key pressed");
-            snakes[1].moveRight();
+            snakes[1].direction = "down";
         } else if (keyCode == KeyEvent.VK_DOWN) {
             System.out.println("D key pressed");
-            snakes[1].moveDown();
+            snakes[1].direction = "right";
         }
     }
 
