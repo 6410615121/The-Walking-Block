@@ -6,10 +6,12 @@ public class Snake {
     // Queue<int[][]> passed;
     public int current_x;
     public int current_y;
+    public String direction;
 
     public Snake(int current_x, int current_y){
         this.current_x = current_x;
         this.current_y = current_y;
+        this.direction = "right";
         length = 1;
     }
 
@@ -36,6 +38,18 @@ public class Snake {
     public void moveRight(){
         current_x += 1;
         System.out.printf("x,y : %s,%s\n", current_x, current_y);
+    }
+
+    public void move(){
+        if(direction.equals("up")){
+            moveUp();
+        }else if(direction.equals("down")){
+            moveDown();
+        }else if(direction.equals("left")){
+            moveLeft();
+        }else if(direction.equals("right")){
+            moveRight();
+        }
     }
     
 }
