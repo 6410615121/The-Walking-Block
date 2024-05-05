@@ -106,28 +106,36 @@ public class Game implements KeyListener {
         List<TrailPoint> trailSnake0 = this.snakes[0].trail;
         List<TrailPoint> trailSnake1 = this.snakes[1].trail;
 
-        cellPanels[this.snakes[0].current_y][this.snakes[0].current_x].setBackground(Color.BLUE);
+        Thread snake1Trail = new Thread(() -> {
+            cellPanels[this.snakes[0].current_y][this.snakes[0].current_x].setBackground(Color.BLUE);
 
-        int check = 1;
-        for(int i=trailSnake1.size() - 1; i >= 0 ; i--){
-            if (check >= this.snakes[0].length) {
-                break;
+            int check = 1;
+            for(int i=trailSnake1.size() - 1; i >= 0 ; i--){
+                if (check >= this.snakes[0].length) {
+                    break;
+                }
+    
+                cellPanels[trailSnake0.get(i).y][trailSnake0.get(i).x].setBackground(Color.BLUE);
+                check++;
             }
+        });
 
-            cellPanels[trailSnake0.get(i).y][trailSnake0.get(i).x].setBackground(Color.BLUE);
-            check++;
-        }
-        check = 1;
+        Thread snake2Trail = new Thread(() ->{
+            cellPanels[this.snakes[1].current_y][this.snakes[1].current_x].setBackground(Color.GREEN);
 
-        cellPanels[this.snakes[1].current_y][this.snakes[1].current_x].setBackground(Color.GREEN);
-        for(int i=trailSnake1.size() - 1; i >= 0 ; i--){
-            if (check >= this.snakes[1].length) {
-                break;
+            int check = 1;
+            for(int i=trailSnake1.size() - 1; i >= 0 ; i--){
+                if (check >= this.snakes[1].length) {
+                    break;
+                }
+    
+                cellPanels[trailSnake1.get(i).y][trailSnake1.get(i).x].setBackground(Color.GREEN);
+                check++;
             }
+        });
 
-            cellPanels[trailSnake1.get(i).y][trailSnake1.get(i).x].setBackground(Color.GREEN);
-            check++;
-        }
+        snake1Trail.start();
+        snake2Trail.start();
 
     }
 
