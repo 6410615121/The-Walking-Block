@@ -12,6 +12,8 @@ public class Game implements KeyListener {
     private JPanel[][] cellPanels;
     public Snake[] snakes = new Snake[2];
 
+    public boolean isPlaying = false;
+
     public Game() {
         gridPanel = new GridPanel();
         gridPanel.jframe.addKeyListener(this);
@@ -106,7 +108,11 @@ public class Game implements KeyListener {
         List<TrailPoint> trailSnake0 = this.snakes[0].trail;
         List<TrailPoint> trailSnake1 = this.snakes[1].trail;
 
-        Thread snake1Trail = new Thread(() -> {
+        Thread snake0Trail = new Thread(() -> {
+            if(this.snakes[0].current_y == this.snakes[1].current_y && this.snakes[0].current_x == this.snakes[1].current_x){
+                System.out.println("COLLISION OCCUR");
+                this.isPlaying = false;
+            }
             cellPanels[this.snakes[0].current_y][this.snakes[0].current_x].setBackground(Color.BLUE);
 
             int check = 1;
@@ -115,6 +121,10 @@ public class Game implements KeyListener {
                     break;
                 }
                 try{
+                    if(this.snakes[0].current_x == trailSnake1.get(i).x && this.snakes[0].current_y == trailSnake1.get(i).y){
+                        System.out.println("COLLISION OCCUR");
+                        this.isPlaying = false;
+                    }
                     cellPanels[trailSnake0.get(i).y][trailSnake0.get(i).x].setBackground(Color.BLUE);
                 }catch(IndexOutOfBoundsException e){
                     System.out.println("unsynced");
@@ -125,7 +135,11 @@ public class Game implements KeyListener {
             }
         });
 
-        Thread snake2Trail = new Thread(() ->{
+        Thread snake1Trail = new Thread(() ->{
+            if(this.snakes[0].current_y == this.snakes[1].current_y && this.snakes[0].current_x == this.snakes[1].current_x){
+                System.out.println("COLLISION OCCUR");
+                this.isPlaying = false;
+            }
             cellPanels[this.snakes[1].current_y][this.snakes[1].current_x].setBackground(Color.GREEN);
 
             int check = 1;
@@ -135,6 +149,10 @@ public class Game implements KeyListener {
                 }
     
                 try{
+                    if(this.snakes[1].current_x == trailSnake0.get(i).x && this.snakes[1].current_y == trailSnake0.get(i).y){
+                        System.out.println("COLLISION OCCUR");
+                        this.isPlaying = false;
+                    }
                     cellPanels[trailSnake1.get(i).y][trailSnake1.get(i).x].setBackground(Color.GREEN);
                 }catch(IndexOutOfBoundsException e){
                     System.out.println("unsynced");
@@ -144,8 +162,8 @@ public class Game implements KeyListener {
             }
         });
 
+        snake0Trail.start();
         snake1Trail.start();
-        snake2Trail.start();
 
     }
 
@@ -180,6 +198,7 @@ public class Game implements KeyListener {
 
         game.snakes[0].direction = "right";
         game.snakes[1].direction = "left";
+        game.isPlaying = true;
 
 
         // Create and start threads for each snake
@@ -211,13 +230,15 @@ public class Game implements KeyListener {
         // Start the threads
         snake1Thread.start();
 
-        while (true) {
+        while (game.isPlaying) {
                 // TimeUnit.MILLISECONDS.sleep(500);
                 game.snakeRoll();
                 game.clearBoard();
                 game.paintSnakes();
                 game.waitHalfsec();
          } 
+
+         snake1Thread.interrupt();
     }
 
 }
