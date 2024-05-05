@@ -1,5 +1,5 @@
 public class Apple {
-    private int[] coordinate; 
+    public int[] coordinate; 
 
     public Apple(int[] coordinate){
         this.coordinate = coordinate;
