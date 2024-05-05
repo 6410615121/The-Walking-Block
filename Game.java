@@ -114,8 +114,13 @@ public class Game implements KeyListener {
                 if (check >= this.snakes[0].length) {
                     break;
                 }
-    
-                cellPanels[trailSnake0.get(i).y][trailSnake0.get(i).x].setBackground(Color.BLUE);
+                try{
+                    cellPanels[trailSnake0.get(i).y][trailSnake0.get(i).x].setBackground(Color.BLUE);
+                }catch(IndexOutOfBoundsException e){
+                    System.out.println("unsynced");
+                    cellPanels[trailSnake0.get(i-1).y][trailSnake0.get(i-1).x].setBackground(Color.BLUE);
+                }
+                
                 check++;
             }
         });
@@ -129,7 +134,12 @@ public class Game implements KeyListener {
                     break;
                 }
     
-                cellPanels[trailSnake1.get(i).y][trailSnake1.get(i).x].setBackground(Color.GREEN);
+                try{
+                    cellPanels[trailSnake1.get(i).y][trailSnake1.get(i).x].setBackground(Color.GREEN);
+                }catch(IndexOutOfBoundsException e){
+                    System.out.println("unsynced");
+                    cellPanels[trailSnake1.get(i-1).y][trailSnake1.get(i-1).x].setBackground(Color.GREEN);
+                }
                 check++;
             }
         });
@@ -152,7 +162,7 @@ public class Game implements KeyListener {
 
     public void waitHalfsec(){
         try {
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.MILLISECONDS.sleep(100);
         } catch (InterruptedException e) {
             System.out.println("interrupted: " + e);
         }
@@ -176,21 +186,11 @@ public class Game implements KeyListener {
         Thread snake1Thread = new Thread(() -> {
             while (true) {
                 try {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(250);
                     game.snakes[0].move();
-                } catch (InterruptedException e) {
-                    System.out.println("Thread for Snake 1 interrupted: " + e);
-                }
-            }
-        });
-
-        Thread snake2Thread = new Thread(() -> {
-            while (true) {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(500);
                     game.snakes[1].move();
                 } catch (InterruptedException e) {
-                    System.out.println("Thread for Snake 2 interrupted: " + e);
+                    System.out.println("Thread for Snake 1 interrupted: " + e);
                 }
             }
         });
@@ -210,7 +210,6 @@ public class Game implements KeyListener {
 
         // Start the threads
         snake1Thread.start();
-        snake2Thread.start();
 
         while (true) {
                 // TimeUnit.MILLISECONDS.sleep(500);
