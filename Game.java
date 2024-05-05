@@ -3,6 +3,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.concurrent.TimeUnit;
 
+import java.util.List;
+
 import javax.swing.JPanel;
 
 public class Game implements KeyListener {
@@ -100,9 +102,19 @@ public class Game implements KeyListener {
         }
     }
 
-    public void paintSnakeHead(){
-        this.cellPanels[this.snakes[0].current_y][this.snakes[0].current_x].setBackground(Color.BLUE);
+    public void paintSnake(){
+        List<TrailPoint> trailSnake0 = this.snakes[0].trail;
+        List<TrailPoint> trailSnake1 = this.snakes[1].trail;
+
+        cellPanels[this.snakes[0].current_y][this.snakes[0].current_x].setBackground(Color.BLUE);
+        for (TrailPoint point : trailSnake0) {
+            cellPanels[point.y][point.x].setBackground(Color.BLUE);
+        }
+
         cellPanels[this.snakes[1].current_y][this.snakes[1].current_x].setBackground(Color.GREEN);
+        for (TrailPoint point : trailSnake1) {
+            cellPanels[point.y][point.x].setBackground(Color.GREEN);
+        }
     }
 
     public void clearBoard(){
@@ -182,7 +194,7 @@ public class Game implements KeyListener {
                 // TimeUnit.MILLISECONDS.sleep(500);
                 game.snakeRoll();
                 game.clearBoard();
-                game.paintSnakeHead();
+                game.paintSnake();
                 game.waitHalfsec();
          } 
     }
