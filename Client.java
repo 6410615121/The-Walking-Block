@@ -2,13 +2,15 @@ import javax.swing.JFrame;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
-public class Client extends JFrame implements KeyListener{
+public class Client implements KeyListener{
+    public JFrame jframe;
     public Client(){
-        JFrame jframe = new JFrame();
+        jframe = new JFrame();
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jframe.setVisible(true);
+
         jframe.setSize(400, 400);
         jframe.addKeyListener(this);
+        jframe.setVisible(true);
     }
 
     @Override
