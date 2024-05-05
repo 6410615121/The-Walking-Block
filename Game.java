@@ -102,19 +102,33 @@ public class Game implements KeyListener {
         }
     }
 
-    public void paintSnake(){
+    public void paintSnakes(){
         List<TrailPoint> trailSnake0 = this.snakes[0].trail;
         List<TrailPoint> trailSnake1 = this.snakes[1].trail;
 
         cellPanels[this.snakes[0].current_y][this.snakes[0].current_x].setBackground(Color.BLUE);
-        for (TrailPoint point : trailSnake0) {
-            cellPanels[point.y][point.x].setBackground(Color.BLUE);
+
+        int check = 1;
+        for(int i=trailSnake1.size() - 1; i >= 0 ; i--){
+            if (check >= this.snakes[0].length) {
+                break;
+            }
+
+            cellPanels[trailSnake0.get(i).y][trailSnake0.get(i).x].setBackground(Color.BLUE);
+            check++;
         }
+        check = 1;
 
         cellPanels[this.snakes[1].current_y][this.snakes[1].current_x].setBackground(Color.GREEN);
-        for (TrailPoint point : trailSnake1) {
-            cellPanels[point.y][point.x].setBackground(Color.GREEN);
+        for(int i=trailSnake1.size() - 1; i >= 0 ; i--){
+            if (check >= this.snakes[1].length) {
+                break;
+            }
+
+            cellPanels[trailSnake1.get(i).y][trailSnake1.get(i).x].setBackground(Color.GREEN);
+            check++;
         }
+
     }
 
     public void clearBoard(){
@@ -194,7 +208,7 @@ public class Game implements KeyListener {
                 // TimeUnit.MILLISECONDS.sleep(500);
                 game.snakeRoll();
                 game.clearBoard();
-                game.paintSnake();
+                game.paintSnakes();
                 game.waitHalfsec();
          } 
     }

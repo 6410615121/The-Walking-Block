@@ -17,7 +17,7 @@ public class Snake {
         this.current_x = current_x;
         this.current_y = current_y;
         this.direction = "right";
-        length = 1;
+        length = 3;
         this.trail = new ArrayList<TrailPoint>();
     }
 
