@@ -1,16 +1,48 @@
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
 import java.awt.event.KeyListener;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 
 public class Client implements KeyListener{
     public JFrame jframe;
+    public JPanel[][] cellPanels;
+
     public Client(){
         jframe = new JFrame();
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         jframe.setSize(400, 400);
+        // jframe.setResizable(false);
+        jframe.setLocationRelativeTo(null);
         jframe.addKeyListener(this);
+        
+        GridLayout grid = new GridLayout(10, 10, 1, 1);
+        jframe.setLayout(grid);
+        
+        // create cell 10 x 10
+        JPanel[][] cellPanels = new JPanel[10][10]; // 
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                JPanel cellPanel = createCellPanel();
+                jframe.add(cellPanel);
+                cellPanels[i][j] = cellPanel;
+            }
+        }
+
         jframe.setVisible(true);
+    }
+
+    private JPanel createCellPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        return panel;
     }
 
     @Override
@@ -39,7 +71,8 @@ public class Client implements KeyListener{
     }
 
     public static void main(String[] args) {
-        new Client();
+        Client client = new Client();
+
     }
 
 }
