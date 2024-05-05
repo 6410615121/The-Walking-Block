@@ -46,10 +46,10 @@ public class Game implements KeyListener {
             snakes[1].direction = "left";
         } else if (keyCode == KeyEvent.VK_RIGHT) {
             System.out.println("S key pressed");
-            snakes[1].direction = "down";
+            snakes[1].direction = "right";
         } else if (keyCode == KeyEvent.VK_DOWN) {
             System.out.println("D key pressed");
-            snakes[1].direction = "right";
+            snakes[1].direction = "down";
         }
     }
 
@@ -137,25 +137,54 @@ public class Game implements KeyListener {
         game.snakes[0].direction = "right";
         game.snakes[1].direction = "left";
 
-        while (true) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(500);
-                game.snakes[0].move();
-                game.snakes[1].move();
-            } catch (InterruptedException e) {
-                System.out.println("interrupted: " + e);
-            }
-            game.snakeRoll();
 
-            try{
+        // Create and start threads for each snake
+        Thread snake1Thread = new Thread(() -> {
+            while (true) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                    game.snakes[0].move();
+                } catch (InterruptedException e) {
+                    System.out.println("Thread for Snake 1 interrupted: " + e);
+                }
+            }
+        });
+
+        Thread snake2Thread = new Thread(() -> {
+            while (true) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                    game.snakes[1].move();
+                } catch (InterruptedException e) {
+                    System.out.println("Thread for Snake 2 interrupted: " + e);
+                }
+            }
+        });
+
+        Thread appleThread = new Thread(() -> {
+            while (true) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(5000);
+                    game.snakes[1].move();
+                } catch (InterruptedException e) {
+                    System.out.println("Thread for Snake 2 interrupted: " + e);
+                }
+            }
+        });
+
+
+
+        // Start the threads
+        snake1Thread.start();
+        snake2Thread.start();
+
+        while (true) {
+                // TimeUnit.MILLISECONDS.sleep(500);
+                game.snakeRoll();
                 game.clearBoard();
                 game.paintSnakeHead();
                 game.waitHalfsec();
-            }catch(ArrayIndexOutOfBoundsException e){
-                System.out.println("End");
-                return;
-            }
-        }
+         } 
     }
 
 }
