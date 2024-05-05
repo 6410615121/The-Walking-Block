@@ -4,12 +4,13 @@
 public class Snake {
     public int length; // Length of a snake
     // Queue<int[][]> passed;
-    public int[] current; // [x,y] coordinate of head of a snake 
+    public int current_x;
+    public int current_y;
 
-    public Snake(int[] current){
-        this.current = current;
+    public Snake(int current_x, int current_y){
+        this.current_x = current_x;
+        this.current_y = current_y;
         length = 1;
-        // passed = new LinkedList<>();
     }
 
     public void eat(Apple a){
@@ -17,14 +18,24 @@ public class Snake {
         System.out.printf("length : %s", length);
     }
 
-    public void move(String direction){
-        int current_x = current[0];
-        int current_y = current[1];
-        if (direction.equalsIgnoreCase("up")){
-            current = new int[]{current_x, ++current_y};
-            
-            System.out.printf("x,y : %s,%s\n", current[0], current[1]);
-        }
+    public void moveUp(){
+        current_y -= 1;
+        System.out.printf("x,y : %s,%s\n", current_x, current_y);
+    }
+
+    public void moveDown(){
+        current_y += 1;
+        System.out.printf("x,y : %s,%s\n", current_x, current_y);
+    }
+
+    public void moveLeft(){
+        current_x -= 1;
+        System.out.printf("x,y : %s,%s\n", current_x, current_y);
+    }
+
+    public void moveRight(){
+        current_x += 1;
+        System.out.printf("x,y : %s,%s\n", current_x, current_y);
     }
     
 }
