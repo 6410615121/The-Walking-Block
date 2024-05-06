@@ -3,19 +3,19 @@ package simpleBlock;
 import java.io.Serializable;
 
 public class Cell implements Serializable{
-    private int rol;
+    private int row;
     private int col;
 
-    public Cell(int rol, int col) {
-        this.rol = rol;
+    public Cell(int row, int col) {
+        this.row = row;
         this.col = col;
     }
     
-    public int getRol() {
-        return rol;
+    public int getRow() {
+        return row;
     }
-    public void setRol(int rol) {
-        this.rol = rol;
+    public void setRow(int row) {
+        this.row = row;
     }
     
     public int getCol() {
@@ -30,7 +30,7 @@ public class Cell implements Serializable{
         Cell cell = (Cell) obj;
         // System.out.printf("cell.rol: %d\n", cell.rol);
         // System.out.printf("cell.col: %d\n", cell.col);
-        if(rol == cell.rol && col == cell.col){
+        if(row == cell.row && col == cell.col){
             // System.out.println("cell equal");
             return true;
             
@@ -42,7 +42,7 @@ public class Cell implements Serializable{
 
     @Override
     public String toString() {
-        return String.format("row: %d, col: %d", rol, col);
+        return String.format("row: %d, col: %d", row, col);
     }
     
 }
