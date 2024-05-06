@@ -62,8 +62,8 @@ public class GameServer {
                         obj = in.readObject();
                         if (obj instanceof Player) {
                             Player newPlayer = (Player) obj;
-                            System.out.println(newPlayer.hashCode());
-                            System.out.println(newPlayer);
+                            // System.out.println(newPlayer.hashCode());
+                            // System.out.println(newPlayer);
                             game.updatePlayerPosition(newPlayer); // Update player position in the game
                         } else {
                             return;
@@ -73,7 +73,7 @@ public class GameServer {
 
                         // send update players state to a player
                         List<Player> players = game.getPlayers();
-                        outObject.writeObject(players);
+                        outObject.writeUnshared(players);
                         System.out.println("sent players object!");
                         TimeUnit.MILLISECONDS.sleep(500);
                     }

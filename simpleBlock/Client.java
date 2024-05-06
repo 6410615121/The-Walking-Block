@@ -66,9 +66,7 @@ public class Client {
                     players = (ArrayList<Player>) obj;
                 }
                 System.out.println("got players");
-
                 movePlayerRight(player, board);
-
                 TimeUnit.MILLISECONDS.sleep(500);
             }
 
