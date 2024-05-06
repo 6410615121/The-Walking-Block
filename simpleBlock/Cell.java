@@ -3,20 +3,12 @@ package simpleBlock;
 public class Cell {
     private int rol;
     private int col;
-    private String color;
 
-    public Cell(int rol, int col, String color) {
+    public Cell(int rol, int col) {
         this.rol = rol;
         this.col = col;
-        this.color = color;
     }
     
-    public String getColor() {
-        return color;
-    }
-    public void setColor(String color) {
-        this.color = color;
-    }
     public int getRol() {
         return rol;
     }
