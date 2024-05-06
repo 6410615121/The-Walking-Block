@@ -1,6 +1,7 @@
 package simpleBlock;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -20,16 +21,42 @@ public class Client {
     private ObjectInputStream inObject;
     private ObjectOutputStream outObject;
 
+    private DataOutputStream outData;
+    private DataInputStream inData;
+
     public Client(Player player, Socket socket) {
         this.player = player;
         this.socket = socket;
 
         try {
-            inObject = new ObjectInputStream(socket.getInputStream());
-            outObject = new ObjectOutputStream(socket.getOutputStream());
+            this.inData = new DataInputStream(socket.getInputStream());
+            this.outData = new DataOutputStream(socket.getOutputStream());
+
+            // this.inObject = new ObjectInputStream(socket.getInputStream());
+            // this.outObject = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             System.err.println("Error while trying to create Object...Stream");
             e.printStackTrace();
+        }
+    }
+
+    protected void sentMessageToServer(String message){
+        try {
+            outData.writeUTF(message);
+        } catch (IOException e) {
+            System.err.println("Error while trying to send message to client");
+            e.printStackTrace();
+        }
+    }
+
+    protected String getMessageFromServer(){
+        try {
+            String message = inData.readUTF();
+            return message;
+        } catch (IOException e) {
+            System.err.println("Error while trying to send message to client");
+            e.printStackTrace();
+            return null;
         }
     }
 

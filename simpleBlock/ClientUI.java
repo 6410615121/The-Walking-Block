@@ -58,10 +58,16 @@ public class ClientUI extends JFrame implements KeyListener{
     }
 
     public static void main(String[] args) {
-        Player player = new Player("paipai323", "Black", new Cell(0, 0));
         try {
+            Player player = new Player("paipai323", "Black", new Cell(0, 0));
             Socket socket = new Socket("localhost", 12345);
-            ClientUI clientUI = new ClientUI(new Client(player, socket));
+            System.out.println("connected");
+
+            Client client = new Client(player, socket);
+            System.out.println("created client");
+            ClientUI clientUI = new ClientUI(client);
+
+            System.out.println("message: " + client.getMessageFromServer());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
