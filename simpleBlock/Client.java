@@ -61,4 +61,18 @@ public class Client {
         }
     }
 
+    public void playerMove(String direction){
+        if(direction.equalsIgnoreCase("down")){
+            Cell current_pos_cell = player.getPositionCell();
+            int current_row = current_pos_cell.getRow();
+            int current_col = current_pos_cell.getCol();
+            
+            if(++current_row > board.ROW_SIZE){
+                current_row = 0;
+            }
+
+            player.setPositionCell(new Cell(current_row, current_col));
+        }
+    }
+
 }
