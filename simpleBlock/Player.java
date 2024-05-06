@@ -43,4 +43,20 @@ public class Player implements Serializable{
         return message;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Player){
+            Player playerObj = (Player) obj;
+            String playerObj_ID = playerObj.getPlayerID();
+
+            if(this.getPlayerID().equals(playerObj_ID)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
 }
