@@ -65,9 +65,17 @@ public class ClientUI extends JFrame implements KeyListener{
 
             Client client = new Client(player, socket);
             System.out.println("created client");
-            ClientUI clientUI = new ClientUI(client);
 
-            System.out.println("message: " + client.getMessageFromServer());
+            ClientUI clientUI = new ClientUI(client);
+            System.out.println("get UI");
+
+            // send player
+            client.sentPlayerObjToServer();
+
+            // get board
+            client.getBoardFromServer();
+
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {

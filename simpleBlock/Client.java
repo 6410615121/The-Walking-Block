@@ -28,16 +28,12 @@ public class Client {
         this.player = player;
         this.socket = socket;
 
-        try {
-            this.inData = new DataInputStream(socket.getInputStream());
-            this.outData = new DataOutputStream(socket.getOutputStream());
+            // this.inData = new DataInputStream(socket.getInputStream());
+            // this.outData = new DataOutputStream(socket.getOutputStream());
 
             // this.inObject = new ObjectInputStream(socket.getInputStream());
             // this.outObject = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            System.err.println("Error while trying to create Object...Stream");
-            e.printStackTrace();
-        }
+
     }
 
     protected void sentMessageToServer(String message){
@@ -60,18 +56,23 @@ public class Client {
         }
     }
 
-    public void sentPlayerObjToServer() {
-        try {
-            outObject.writeUnshared(player);
-        } catch (IOException e) {
-            System.err.println("Error while trying to sent Player Object");
-            e.printStackTrace();
-        }
+    public void sentPlayerObjToServer() throws IOException {
+        this.outObject = new ObjectOutputStream(socket.getOutputStream());
+        outObject.writeUnshared(player);
     }
 
-    public void getBoardFromServer(ObjectInputStream in) {
+    public void getBoardFromServer() {
+        if(this.inObject == null){
+            try {
+                this.inObject = new ObjectInputStream(socket.getInputStream());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
         try {
-            this.board = (Board) in.readObject();
+            this.board = (Board) this.inObject.readObject();
         } catch (ClassNotFoundException | IOException e) {
             System.err.println("Error while trying to get Board Object");
             e.printStackTrace();

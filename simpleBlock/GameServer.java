@@ -61,20 +61,23 @@ public class GameServer {
             this.game = game;
             this.board = game.getBoard();
 
-            try {
-                // this.inObject = new ObjectInputStream(clientSocket.getInputStream());
-                // this.outObject = new ObjectOutputStream(clientSocket.getOutputStream());
+                
+            // 
 
-                this.inData = new DataInputStream(clientSocket.getInputStream());
-                this.outData = new DataOutputStream(clientSocket.getOutputStream());
-            } catch (IOException e) {
-                System.err.println("Error while trying to init Object..Stream");
-                e.printStackTrace();
-            }
-            
+            // this.inData = new DataInputStream(clientSocket.getInputStream());
+            // this.outData = new DataOutputStream(clientSocket.getOutputStream());
+
         }
 
         private Player getPlayerObjectFromClient(){
+            if(inObject == null){
+                try {
+                    this.inObject = new ObjectInputStream(clientSocket.getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             try {
                 Player player = (Player) inObject.readObject();
                 return player;
@@ -85,6 +88,14 @@ public class GameServer {
         }
 
         private void sentBoardToClient(){
+            if(this.outObject == null){
+                try {
+                    this.outObject = new ObjectOutputStream(clientSocket.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             try {
                 outObject.writeUnshared(board);
             } catch (IOException e) {
@@ -105,23 +116,22 @@ public class GameServer {
         @Override
         public void run() {
             System.out.println("Connected");
-            sentMessageToClient("Hello Client");
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-
+  
             // get Player object
-            // Player player = getPlayerObjectFromClient();
+            Player player = getPlayerObjectFromClient();
+            System.out.println("got player: " + player);
 
             // sent Board object
-            // sentBoardToClient();
+            sentBoardToClient();
             
 
             // loop (get player > update pos > sent players)
+
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
