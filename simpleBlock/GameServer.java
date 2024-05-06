@@ -13,122 +13,28 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GameServer {
-    // private List<Client> client;
-    private final Game game;
+    private Game game;
+    private List<Player> players;
 
-    public GameServer() {
-        // client = new ArrayList<Client>();
-        game = new Game(new Board(10, 10));
-    }
+    public static class ClientHandler implements Runnable{
+        private Socket clientSocket;
+        private Game game;
+        private List<Player> players;
+        private Board board;
 
-    static class ClientHandler implements Runnable {
-        private final Socket clientSocket;
-        private final Game game;
-
-        public ClientHandler(Socket clientSocket, Game game) {
+        public ClientHandler(Socket clientSocket, Game game){
             this.clientSocket = clientSocket;
             this.game = game;
+            this.board = game.getBoard();
+            this.players = game.getPlayers();
         }
 
         @Override
         public void run() {
-            try {
-                DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-                out.writeUTF("Hey client, Send me your Player obj");
-                // out.close();
-
-                ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-                try {
-                    Object obj = in.readObject();
-                    // in.close();
-                    Player player;
-                    if (obj instanceof Player) {
-                        player = (Player) obj;
-                    } else {
-                        throw new IOException("Wrong Object");
-                    }
-
-                    // get player
-                    System.out.println("recieved Player: " + player);
-                    game.addPlayer(player);
-                    System.out.println("added a player");
-
-                    // send Board
-                    ObjectOutputStream outObject = new ObjectOutputStream(clientSocket.getOutputStream());
-                    outObject.writeObject(game.getBoard());
-                    System.out.println("sent Board object!");
-                    while (true) {
-                        // Update position of a player.
-                        obj = in.readObject();
-                        if (obj instanceof Player) {
-                            Player newPlayer = (Player) obj;
-                            // System.out.println(newPlayer.hashCode());
-                            // System.out.println(newPlayer);
-                            game.updatePlayerPosition(newPlayer); // Update player position in the game
-                        } else {
-                            return;
-                        }
-
-                        // System.out.println(player);
-
-                        // send update players state to a player
-                        List<Player> players = game.getPlayers();
-                        outObject.writeUnshared(players);
-                        System.out.println("sent players object!");
-                        TimeUnit.MILLISECONDS.sleep(500);
-                    }
-
-                } catch (ClassNotFoundException | InterruptedException e) {
-                    e.printStackTrace();
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    clientSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
+            // get Player object
+            // sent Board object
+            
+            // loop (get player > update pos > sent players)
         }
-
-        public static void main(String[] args) {
-            try {
-                ServerSocket serverSocket = new ServerSocket(12345);
-                Game game = new Game(new Board(10, 10));
-
-                while (true) {
-                    System.out.println("waiting for connection");
-                    Socket clientSocket = serverSocket.accept();
-
-                    // handle client
-                    Thread clientThread = new Thread(new ClientHandler(clientSocket, game));
-                    clientThread.start();
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // public static void main(String[] args) {
-        // try {
-        // Player player = new Player("paipai323", "red", new Cell(0, 0));
-        // ServerSocket serverSocket = new ServerSocket(12345);
-
-        // System.out.println("waiting on 12345");
-        // Socket clientSocket = serverSocket.accept();
-
-        // ObjectOutputStream out = new
-        // ObjectOutputStream(clientSocket.getOutputStream());
-        // out.writeObject(player);
-        // out.close();
-
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        // }
     }
 }
