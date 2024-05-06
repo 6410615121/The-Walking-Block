@@ -1,11 +1,16 @@
 package simpleBlock;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable{
     private String playerID;
     private String color;
+    private Cell positionCell;
 
-    public Player(String playerID) {
+    public Player(String playerID, String color, Cell positionCell) {
         this.playerID = playerID;
+        this.color = color;
+        this.positionCell = positionCell;
     }
 
     public String getColor() {
@@ -22,6 +27,14 @@ public class Player {
 
     public void setPlayerID(String playerID) {
         this.playerID = playerID;
+    }
+
+    public Cell getPositionCell() {
+        return positionCell;
+    }
+
+    public void setPositionCell(Cell positionCell) {
+        this.positionCell = positionCell;
     }
 
 }
