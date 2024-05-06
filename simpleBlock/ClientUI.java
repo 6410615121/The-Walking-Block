@@ -16,12 +16,12 @@ import java.util.List;;
 
 public class ClientUI extends JFrame implements KeyListener{
     private Client client;
-    private int characterRow;
-    private int characterCol;
+    private List<Player> prev_players;
+    
 
     public ClientUI(Client client){
         this.client = client;
-
+        prev_players = client.getPlayers();
         initFrame();
     }
 
@@ -51,18 +51,11 @@ public class ClientUI extends JFrame implements KeyListener{
         setVisible(true);
     }
 
-    // public void renderOtherPlayer(){
+    public void renderOtherPlayer(){
 
-    //     }
-    // }
-
-    public void renderClientCharacter(){
-        List<Player> players = client.getPlayers();
-
-        for (Player player : players) {
-            
-        }
+        
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -109,23 +102,26 @@ public class ClientUI extends JFrame implements KeyListener{
             client.sentPlayerObjToServer();
             System.out.println("sent player");
 
+            // get board
+            client.getBoardFromServer();
+            System.out.println("got board");
+
             // UI thread
             Thread UIThread = new Thread(() -> {
                 ClientUI clientUI = new ClientUI(client);
                 System.out.println("get UI");
 
-                // get board
-                client.getBoardFromServer();
-                System.out.println("got board");
                 clientUI.initBoard();
                 System.out.println("set board");
 
                 // loop render screen
-
             });
             UIThread.start();
 
             // loop thread
+
+
+
 
 
         } catch (UnknownHostException e) {
