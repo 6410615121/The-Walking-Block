@@ -33,7 +33,7 @@ public class Client {
         }
     }
 
-    public void sentPlayerObj() {
+    public void sentPlayerObjToServer() {
         try {
             outObject.writeUnshared(player);
         } catch (IOException e) {
@@ -42,7 +42,7 @@ public class Client {
         }
     }
 
-    public void getBoard(ObjectInputStream in) {
+    public void getBoardFromServer(ObjectInputStream in) {
         try {
             this.board = (Board) in.readObject();
         } catch (ClassNotFoundException | IOException e) {
@@ -52,7 +52,7 @@ public class Client {
     }
 
     @SuppressWarnings("unchecked")
-    public void getPlayers() {
+    public void getPlayersFromServer() {
         try {
             this.players = (List<Player>) inObject.readObject();
         } catch (ClassNotFoundException | IOException e) {
@@ -73,6 +73,10 @@ public class Client {
 
             player.setPositionCell(new Cell(current_row, current_col));
         }
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
 }
