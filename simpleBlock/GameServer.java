@@ -119,6 +119,7 @@ public class GameServer {
   
             // get Player object
             Player player = getPlayerObjectFromClient();
+            game.addPlayer(player);
             System.out.println("got player: " + player);
 
             // sent Board object

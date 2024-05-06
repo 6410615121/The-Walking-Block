@@ -71,7 +71,7 @@ public class ClientUI extends JFrame implements KeyListener{
                 // Handle up arrow key press
                 break;
             case KeyEvent.VK_DOWN:
-                // Handle down arrow key press
+                client.playerMove("down");
                 break;
             case KeyEvent.VK_LEFT:
                 // Handle left arrow key press
