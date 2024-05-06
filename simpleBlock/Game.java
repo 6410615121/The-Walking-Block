@@ -28,4 +28,15 @@ public class Game implements Serializable{
     public void setBoard(Board board) {
         this.board = board;
     }
+
+    public void updatePlayerPosition(Player player) {
+        Cell position = player.getPositionCell();
+        for (Player p : players) {
+            if (p.equals(player) && p.getPositionCell() != position) {
+                p.setPositionCell(position);
+                return;
+            }
+        }
+        System.out.println("Player not found: " + player);
+    }
 }
