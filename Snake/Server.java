@@ -1,3 +1,4 @@
+package Snake;
 public class Server {
     public static void main(String[] args) {
         Snake snake = new Snake(new int[]{0,0});

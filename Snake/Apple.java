@@ -1,3 +1,4 @@
+package Snake;
 public class Apple {
     public int coord_x; 
     public int coord_y;

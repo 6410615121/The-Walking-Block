@@ -1,3 +1,4 @@
+package Snake;
 public class TrailPoint{
     public int x;
     public int y;

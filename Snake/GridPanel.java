@@ -1,3 +1,4 @@
+package Snake;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
