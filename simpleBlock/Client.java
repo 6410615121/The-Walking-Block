@@ -55,8 +55,8 @@ public class Client {
 
             while (true) {
                 // sent player
-                out.writeObject(player);
-                System.out.println(player.hashCode());
+                out.writeUnshared(player);
+                // System.out.println(player.hashCode());
                 System.out.println("sent player: " + player);
 
                 // recieve players
