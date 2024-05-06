@@ -3,6 +3,7 @@ package simpleBlock;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -13,8 +14,15 @@ public class Client {
             Socket socket = new Socket("localhost", 12345);
             DataInputStream in = new DataInputStream(socket.getInputStream());
             String message = in.readUTF();
-
             System.out.println("message from server: " + message);
+
+            // send Player
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            Player player = new Player("paipai323", "red", new Cell(0, 0));
+            out.writeObject(player);
+            // out.close();
+
+
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
