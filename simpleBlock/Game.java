@@ -34,9 +34,14 @@ public class Game implements Serializable{
         for (Player p : players) {
             if (p.equals(player) && p.getPositionCell() != position) {
                 p.setPositionCell(position);
+                System.out.println("updated position of player: "+ player);
                 return;
             }
         }
-        System.out.println("Player not found: " + player);
+        // System.out.println("Player not found: " + player);
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

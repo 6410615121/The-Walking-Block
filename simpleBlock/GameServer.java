@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GameServer {
     // private List<Client> client;
@@ -47,13 +48,33 @@ public class GameServer {
                         throw new IOException("Wrong Object");
                     }
 
+                    // get player
                     System.out.println("recieved Player: " + player);
                     game.addPlayer(player);
                     System.out.println("added a player");
                     
+                    // send Board
+                    ObjectOutputStream outObject = new ObjectOutputStream(clientSocket.getOutputStream());
+                    outObject.writeObject(game.getBoard());
+                    System.out.println("sent Board object!");
+                    while(true){
+                        // update position of a player.
+                        obj = in.readObject();
+                        if(obj instanceof Player){
+                            player = (Player) obj;
+                        }
+                        game.updatePlayerPosition(player);
+
+                        // send update players state to a player
+                        List<Player> players = game.getPlayers();
+                        outObject.writeObject(players);
+                        System.out.println("sent players object!");
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    }
+                    
 
 
-                } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                     return;
                 }
