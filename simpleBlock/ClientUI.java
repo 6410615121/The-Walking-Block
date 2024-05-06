@@ -12,7 +12,8 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;;
+import java.util.List;
+import java.util.concurrent.TimeUnit;;
 
 public class ClientUI extends JFrame implements KeyListener{
     private Client client;
@@ -119,6 +120,20 @@ public class ClientUI extends JFrame implements KeyListener{
             UIThread.start();
 
             // loop thread
+            Thread dataExchangeThread = new Thread(() ->{
+                try {
+                    while(true){
+                        client.sentPlayerObjToServer();
+                        System.out.println("sent player obj");
+
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    }
+                    
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            dataExchangeThread.start();
 
 
 

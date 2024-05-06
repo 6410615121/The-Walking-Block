@@ -58,7 +58,10 @@ public class Client {
     }
 
     public void sentPlayerObjToServer() throws IOException {
-        this.outObject = new ObjectOutputStream(socket.getOutputStream());
+        if (this.outObject == null){
+            this.outObject = new ObjectOutputStream(socket.getOutputStream());
+        }
+
         outObject.writeUnshared(player);
     }
 

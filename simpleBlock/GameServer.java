@@ -125,13 +125,30 @@ public class GameServer {
             sentBoardToClient();
             
 
-            // loop (get player > update pos > sent players)
+            // loop thread (get player > update pos > sent players)
+            Thread dataExchangeThread = new Thread(()->{
+                while(true){
+                    Player newplayer = getPlayerObjectFromClient();
+                    game.updatePlayerPosition(newplayer);
+                    System.out.println("get new player: " + newplayer);
+                    
+                    // wait
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+            });
 
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            dataExchangeThread.start();
+
+            // try {
+            //     clientSocket.close();
+            // } catch (IOException e) {
+            //     e.printStackTrace();
+            // }
         }
     }
 
