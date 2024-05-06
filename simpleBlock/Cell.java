@@ -24,5 +24,25 @@ public class Cell implements Serializable{
     public void setCol(int col) {
         this.col = col;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Cell cell = (Cell) obj;
+        System.out.printf("cell.rol: %d\n", cell.rol);
+        System.out.printf("cell.col: %d\n", cell.col);
+        if(rol == cell.rol && col == cell.col){
+            System.out.println("cell equal");
+            return true;
+            
+        }else{
+            System.out.println("cell not equal");
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("row: %d, col: %d", rol, col);
+    }
     
 }

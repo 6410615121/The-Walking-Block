@@ -39,7 +39,10 @@ public class Player implements Serializable{
 
     @Override
     public String toString() {
-        String message = String.format("PlayerID: %s, color: %s", playerID, color);
+        int col = positionCell.getCol();
+        int row = positionCell.getRol();
+
+        String message = String.format("PlayerID: %s, row,col: %d, %d", playerID, row, col);
         return message;
     }
 
@@ -50,6 +53,7 @@ public class Player implements Serializable{
             String playerObj_ID = playerObj.getPlayerID();
 
             if(this.getPlayerID().equals(playerObj_ID)){
+                // System.out.println("player id equal");
                 return true;
             }else{
                 return false;
