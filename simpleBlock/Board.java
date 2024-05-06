@@ -1,6 +1,8 @@
 package simpleBlock;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable{
     public final int ROW_SIZE;
     public final int COL_SIZE;
 
