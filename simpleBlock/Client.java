@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Client {
     private Player player;
+
     private List<Player> players;
     private Board board;
 
@@ -62,11 +63,10 @@ public class Client {
     }
 
     public void getBoardFromServer() {
-        if(this.inObject == null){
+        if( this.inObject == null){
             try {
                 this.inObject = new ObjectInputStream(socket.getInputStream());
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -103,8 +103,18 @@ public class Client {
         }
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+
     public List<Player> getPlayers() {
         return players;
+    }
+
+    
+    public Board getBoard() {
+        return board;
     }
 
 }

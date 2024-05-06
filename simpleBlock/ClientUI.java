@@ -1,19 +1,27 @@
 package simpleBlock;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;;
+import java.net.UnknownHostException;
+import java.util.List;;
 
 public class ClientUI extends JFrame implements KeyListener{
     private Client client;
+    private int characterRow;
+    private int characterCol;
 
     public ClientUI(Client client){
         this.client = client;
+
         initFrame();
     }
 
@@ -21,8 +29,39 @@ public class ClientUI extends JFrame implements KeyListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         addKeyListener(this);
         setSize(400, 400);
-        setLayout(new GridLayout(40, 40));
+        // setLayout(new GridLayout(40, 40));
         setVisible(true);
+    }
+
+    public void initBoard(){
+        // layout
+        int row_size = client.getBoard().ROW_SIZE;
+        int col_size = client.getBoard().COL_SIZE;
+        setLayout(new GridLayout(row_size, col_size));
+
+        // cell panel
+        for(int i = 0; i < row_size; i++){
+            for(int j = 0; j < col_size; j++){
+                JPanel panel = new JPanel();
+                panel.setBackground(Color.WHITE);
+                panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                add(panel);
+            }
+        }
+        setVisible(true);
+    }
+
+    // public void renderOtherPlayer(){
+
+    //     }
+    // }
+
+    public void renderClientCharacter(){
+        List<Player> players = client.getPlayers();
+
+        for (Player player : players) {
+            
+        }
     }
 
     @Override
@@ -66,14 +105,27 @@ public class ClientUI extends JFrame implements KeyListener{
             Client client = new Client(player, socket);
             System.out.println("created client");
 
-            ClientUI clientUI = new ClientUI(client);
-            System.out.println("get UI");
-
             // send player
             client.sentPlayerObjToServer();
+            System.out.println("sent player");
 
-            // get board
-            client.getBoardFromServer();
+            // UI thread
+            Thread UIThread = new Thread(() -> {
+                ClientUI clientUI = new ClientUI(client);
+                System.out.println("get UI");
+
+                // get board
+                client.getBoardFromServer();
+                System.out.println("got board");
+                clientUI.initBoard();
+                System.out.println("set board");
+
+                // loop render screen
+
+            });
+            UIThread.start();
+
+            // loop thread
 
 
         } catch (UnknownHostException e) {
