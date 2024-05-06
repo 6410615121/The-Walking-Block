@@ -37,4 +37,10 @@ public class Player implements Serializable{
         this.positionCell = positionCell;
     }
 
+    @Override
+    public String toString() {
+        String message = String.format("PlayerID: %s, color: %s", playerID, color);
+        return message;
+    }
+
 }
