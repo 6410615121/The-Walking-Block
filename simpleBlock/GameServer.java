@@ -42,9 +42,9 @@ public class GameServer {
                     Object obj = in.readObject();
                     // in.close();
                     Player player;
-                    if (obj instanceof Player){
+                    if (obj instanceof Player) {
                         player = (Player) obj;
-                    }else{
+                    } else {
                         throw new IOException("Wrong Object");
                     }
 
@@ -52,18 +52,24 @@ public class GameServer {
                     System.out.println("recieved Player: " + player);
                     game.addPlayer(player);
                     System.out.println("added a player");
-                    
+
                     // send Board
                     ObjectOutputStream outObject = new ObjectOutputStream(clientSocket.getOutputStream());
                     outObject.writeObject(game.getBoard());
                     System.out.println("sent Board object!");
-                    while(true){
-                        // update position of a player.
+                    while (true) {
+                        // Update position of a player.
                         obj = in.readObject();
-                        if(obj instanceof Player){
-                            player = (Player) obj;
+                        if (obj instanceof Player) {
+                            Player newPlayer = (Player) obj;
+                            System.out.println(newPlayer.hashCode());
+                            System.out.println(newPlayer);
+                            game.updatePlayerPosition(newPlayer); // Update player position in the game
+                        } else {
+                            return;
                         }
-                        game.updatePlayerPosition(player);
+
+                        // System.out.println(player);
 
                         // send update players state to a player
                         List<Player> players = game.getPlayers();
@@ -71,8 +77,6 @@ public class GameServer {
                         System.out.println("sent players object!");
                         TimeUnit.MILLISECONDS.sleep(500);
                     }
-                    
-
 
                 } catch (ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
@@ -80,10 +84,10 @@ public class GameServer {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally{
-                try{
+            } finally {
+                try {
                     clientSocket.close();
-                }catch(IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

@@ -6,8 +6,27 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Client {
+    static void movePlayerRight(Player player,Board board){
+        Cell position = player.getPositionCell();
+        int current_col = position.getCol();
+        int current_row = position.getRol();
+
+        current_col += 1;
+        if (current_col > board.COL_SIZE){
+            current_col = 0;
+        }
+        // System.out.printf("col: %d\n", current_col);
+
+        player.setPositionCell(new Cell(current_row, current_col));
+        System.out.println(player.getPositionCell());
+        System.out.println("updated position");
+        // System.out.println(player);
+    }
     public static void main(String[] args) {
         Socket socket;
         try {
@@ -18,8 +37,9 @@ public class Client {
 
             // send Player
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            Player player = new Player("paipai323", "red", new Cell(0, 0));
+            Player player = new Player("paipai323", "red", new Cell(5, 5));
             out.writeObject(player);
+            out.flush();
             // out.close();
 
             // get board
@@ -36,13 +56,24 @@ public class Client {
             while (true) {
                 // sent player
                 out.writeObject(player);
+                System.out.println(player.hashCode());
+                System.out.println("sent player: " + player);
 
                 // recieve players
-                inObj.readObject();
+                obj = inObj.readObject();
+                List<Player> players = null;
+                if(obj instanceof ArrayList){
+                    players = (ArrayList<Player>) obj;
+                }
+                System.out.println("got players");
+
+                movePlayerRight(player, board);
+
+                TimeUnit.MILLISECONDS.sleep(500);
             }
 
             // socket.close();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }
