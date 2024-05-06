@@ -40,7 +40,7 @@ public class Player implements Serializable{
     @Override
     public String toString() {
         int col = positionCell.getCol();
-        int row = positionCell.getRol();
+        int row = positionCell.getRow();
 
         String message = String.format("PlayerID: %s, row,col: %d, %d", playerID, row, col);
         return message;
