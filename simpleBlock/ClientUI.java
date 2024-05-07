@@ -56,24 +56,27 @@ public class ClientUI extends JFrame implements KeyListener{
         setVisible(true);
     }
 
-    private Player getPlayerFromPlayers(Player player, List<Player> players){
+    private Player getPlayerFromPlayers(Player player, List<Player> players) {
         for (Player playerInPlayers : players) {
-            if( playerInPlayers.equals(player)){
-                System.out.println("player from getPlayerFromPlayers: " +player);
-                return player;
+            if (playerInPlayers.equals(player)) {
+                return playerInPlayers;
             }
         }
         return null;
     }
+    
 
     public void render(){
         List<Player> new_players = client.getPlayers();
+
     
         try{
             for (Player newplayer : new_players) {
                 Cell new_pos_cell = newplayer.getPositionCell();
                 Player prevPlayer = getPlayerFromPlayers(newplayer, prev_players);
                 Cell old_pos_cell = prevPlayer.getPositionCell();
+
+                System.out.println("(newplayer.isSamePos(prevPlayer)): " + (newplayer.isSamePos(prevPlayer)));
     
                 System.out.println("old_pos_cell: " + old_pos_cell);
                 System.out.println("new_pos_cell: " + new_pos_cell);
@@ -119,16 +122,16 @@ public class ClientUI extends JFrame implements KeyListener{
 
         switch (keyCode) {
             case KeyEvent.VK_UP:
-                // Handle up arrow key press
+                client.playerMove("up");
                 break;
             case KeyEvent.VK_DOWN:
                 client.playerMove("down");
                 break;
             case KeyEvent.VK_LEFT:
-                // Handle left arrow key press
+                client.playerMove("left");
                 break;
             case KeyEvent.VK_RIGHT:
-                // Handle right arrow key press
+                client.playerMove("right");
                 break;
             default:
                 // Handle other key presses if needed
