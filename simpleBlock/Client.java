@@ -107,6 +107,17 @@ public class Client {
             }
 
             player.setPositionCell(new Cell(current_row, current_col));
+        }else if (direction.equalsIgnoreCase("up")){
+            Cell current_pos_cell = player.getPositionCell();
+            int current_row = current_pos_cell.getRow();
+            int current_col = current_pos_cell.getCol();
+            
+            if(--current_row < 0){
+                current_row = board.ROW_SIZE;
+            }
+
+            player.setPositionCell(new Cell(current_row, current_col));
+
         }
     }
 
