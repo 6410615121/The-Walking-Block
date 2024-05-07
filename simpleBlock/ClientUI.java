@@ -81,12 +81,25 @@ public class ClientUI extends JFrame implements KeyListener{
     
                 System.out.println("old_pos_cell: " + old_pos_cell);
                 System.out.println("new_pos_cell: " + new_pos_cell);
+
+                Color color;
+                String playerColor = newplayer.getColor();
+                if(playerColor.equalsIgnoreCase("Black")){
+                    color = Color.BLACK;
+                }else if (playerColor.equalsIgnoreCase("Red")){
+                    color = Color.RED;
+                }else if(playerColor.equalsIgnoreCase("Green")){
+                    color = Color.GREEN;
+                }
+                else{
+                    color = Color.PINK;
+                }
     
                 if(!old_pos_cell.equals(new_pos_cell)){
                     cellPanel[old_pos_cell.getRow()][old_pos_cell.getCol()].setBackground(Color.WHITE);
-                    cellPanel[new_pos_cell.getRow()][new_pos_cell.getCol()].setBackground(Color.BLACK);
+                    cellPanel[new_pos_cell.getRow()][new_pos_cell.getCol()].setBackground(color);
                 } else {
-                    cellPanel[new_pos_cell.getRow()][new_pos_cell.getCol()].setBackground(Color.BLACK);
+                    cellPanel[new_pos_cell.getRow()][new_pos_cell.getCol()].setBackground(color);
                 }
             }
     
@@ -152,7 +165,10 @@ public class ClientUI extends JFrame implements KeyListener{
             System.out.print("Enter username: ");
             String username = scanner.nextLine();
 
-            Player player = new Player(username, "Black", new Cell(0, 0));
+            System.out.print("Enter Color: ");
+            String color = scanner.nextLine();
+
+            Player player = new Player(username, color, new Cell(0, 0));
             Socket socket = new Socket("localhost", 12345);
             System.out.println("connected");
 
