@@ -92,7 +92,7 @@ public class ClientUI extends JFrame implements KeyListener{
     
             // Update prev_players only after rendering all new players
             this.prev_players = new_players;
-            TimeUnit.MILLISECONDS.sleep(20);
+            TimeUnit.MILLISECONDS.sleep(50);
         } catch(InterruptedException e){
             e.printStackTrace();
         } catch(NullPointerException e){
@@ -192,7 +192,7 @@ public class ClientUI extends JFrame implements KeyListener{
                         client.sentPlayerObjToServer();
                         System.out.println("sent player obj");
 
-                        // TimeUnit.MILLISECONDS.sleep(50);
+                        TimeUnit.MILLISECONDS.sleep(50);
 
                         // recieve players from server
                         client.getPlayersFromServer();
@@ -201,6 +201,8 @@ public class ClientUI extends JFrame implements KeyListener{
                     }
                     
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             });
