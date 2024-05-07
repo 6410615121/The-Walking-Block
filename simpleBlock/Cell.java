@@ -27,17 +27,14 @@ public class Cell implements Serializable{
 
     @Override
     public boolean equals(Object obj) {
-        Cell cell = (Cell) obj;
-        // System.out.printf("cell.rol: %d\n", cell.rol);
-        // System.out.printf("cell.col: %d\n", cell.col);
-        if(row == cell.row && col == cell.col){
-            // System.out.println("cell equal");
+        if (this == obj) {
             return true;
-            
-        }else{
-            // System.out.println("cell not equal");
+        }
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
+        Cell otherCell = (Cell) obj;
+        return row == otherCell.row && col == otherCell.col;
     }
 
     @Override
