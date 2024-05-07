@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;;
 
 public class ClientUI extends JFrame implements KeyListener{
@@ -91,7 +92,7 @@ public class ClientUI extends JFrame implements KeyListener{
     
             // Update prev_players only after rendering all new players
             this.prev_players = new_players;
-            TimeUnit.MILLISECONDS.sleep(50);
+            TimeUnit.MILLISECONDS.sleep(20);
         } catch(InterruptedException e){
             e.printStackTrace();
         } catch(NullPointerException e){
@@ -146,7 +147,12 @@ public class ClientUI extends JFrame implements KeyListener{
 
     public static void main(String[] args) {
         try {
-            Player player = new Player("paipai323", "Black", new Cell(0, 0));
+            System.out.println();
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter username: ");
+            String username = scanner.nextLine();
+
+            Player player = new Player(username, "Black", new Cell(0, 0));
             Socket socket = new Socket("localhost", 12345);
             System.out.println("connected");
 
@@ -186,7 +192,7 @@ public class ClientUI extends JFrame implements KeyListener{
                         client.sentPlayerObjToServer();
                         System.out.println("sent player obj");
 
-                        TimeUnit.MILLISECONDS.sleep(50);
+                        // TimeUnit.MILLISECONDS.sleep(50);
 
                         // recieve players from server
                         client.getPlayersFromServer();
@@ -194,7 +200,7 @@ public class ClientUI extends JFrame implements KeyListener{
                         System.out.println("got players obj");
                     }
                     
-                } catch (IOException | InterruptedException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             });

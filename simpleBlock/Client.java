@@ -102,37 +102,40 @@ public class Client {
             int current_row = current_pos_cell.getRow();
             int current_col = current_pos_cell.getCol();
             
-            if(++current_row > board.ROW_SIZE){
+            if(++current_row > board.ROW_SIZE - 1 ){
                 current_row = 0;
             }
 
             player.setPositionCell(new Cell(current_row, current_col));
+
         }else if (direction.equalsIgnoreCase("up")){
             Cell current_pos_cell = player.getPositionCell();
             int current_row = current_pos_cell.getRow();
             int current_col = current_pos_cell.getCol();
             
             if(--current_row < 0){
-                current_row = board.ROW_SIZE;
+                current_row = board.ROW_SIZE - 1;
             }
 
             player.setPositionCell(new Cell(current_row, current_col));
+
         }else if (direction.equalsIgnoreCase("left")){
             Cell current_pos_cell = player.getPositionCell();
             int current_row = current_pos_cell.getRow();
             int current_col = current_pos_cell.getCol();
             
             if(--current_col < 0){
-                current_col = board.COL_SIZE;
+                current_col = board.COL_SIZE - 1;
             }
 
             player.setPositionCell(new Cell(current_row, current_col));
+            
         }else if (direction.equalsIgnoreCase("right")){
             Cell current_pos_cell = player.getPositionCell();
             int current_row = current_pos_cell.getRow();
             int current_col = current_pos_cell.getCol();
             
-            if(++current_col > board.COL_SIZE){
+            if(++current_col > board.COL_SIZE - 1){
                 current_col = 0;
             }
 
