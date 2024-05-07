@@ -117,7 +117,26 @@ public class Client {
             }
 
             player.setPositionCell(new Cell(current_row, current_col));
+        }else if (direction.equalsIgnoreCase("left")){
+            Cell current_pos_cell = player.getPositionCell();
+            int current_row = current_pos_cell.getRow();
+            int current_col = current_pos_cell.getCol();
+            
+            if(--current_col < 0){
+                current_col = board.COL_SIZE;
+            }
 
+            player.setPositionCell(new Cell(current_row, current_col));
+        }else if (direction.equalsIgnoreCase("right")){
+            Cell current_pos_cell = player.getPositionCell();
+            int current_row = current_pos_cell.getRow();
+            int current_col = current_pos_cell.getCol();
+            
+            if(++current_col > board.COL_SIZE){
+                current_col = 0;
+            }
+
+            player.setPositionCell(new Cell(current_row, current_col));
         }
     }
 
