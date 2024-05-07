@@ -75,7 +75,7 @@ public class Client {
         }
 
         try {
-            this.board = (Board) this.inObject.readObject();
+            this.board = (Board) this.inObject.readUnshared();
         } catch (ClassNotFoundException | IOException e) {
             System.err.println("Error while trying to get Board Object");
             e.printStackTrace();
@@ -85,7 +85,11 @@ public class Client {
     @SuppressWarnings("unchecked")
     public void getPlayersFromServer() {
         try {
-            this.players = (List<Player>) inObject.readObject();
+            List<Player> newPlayers = (List<Player>) inObject.readObject();
+            this.players = newPlayers;
+            // System.out.println("players from getplayerfromserver(): " + newPlayers);
+            // System.out.println("newplayers hash: " + newPlayers.hashCode());
+            // System.out.println(this.players);
         } catch (ClassNotFoundException | IOException e) {
             System.err.println("Error while trying to get players list");
             e.printStackTrace();

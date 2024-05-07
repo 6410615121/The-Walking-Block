@@ -37,6 +37,12 @@ public class Game implements Serializable{
 
             if (p.equals(player) && !p.getPositionCell().equals(new_position)) {
                 p.setPositionCell(new_position);
+
+
+                // update in players
+                players.remove(p);
+                players.add(p);
+
                 System.out.println("updated position of player: "+ player);
                 return;
             }

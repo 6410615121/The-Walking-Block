@@ -79,7 +79,7 @@ public class GameServer {
             }
 
             try {
-                Player player = (Player) inObject.readObject();
+                Player player = (Player) inObject.readUnshared();
                 return player;
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
@@ -114,7 +114,11 @@ public class GameServer {
             }
 
             try {
-                outObject.writeUnshared(game.getPlayers());
+                List<Player> playersList = game.getPlayers();
+                outObject.writeUnshared(playersList);
+                outObject.reset(); // reset
+                System.out.println("sent game's players: " + playersList);
+                // System.out.println("players.hashcode(): " + playersList.hashCode());
             } catch (IOException e) {
                 System.err.println("Error while trying to send Board Object to client");
                 e.printStackTrace();
