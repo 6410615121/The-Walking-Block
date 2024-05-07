@@ -63,4 +63,16 @@ public class Player implements Serializable{
         }
     }
 
+    public boolean isSamePos(Player otherPlayer){
+        Cell thisCell = this.getPositionCell();
+        Cell otherCell = otherPlayer.getPositionCell();
+        
+        System.out.println("This cell: " + thisCell);
+        System.out.println("Other cell: " + otherCell);
+        
+        return thisCell.equals(otherCell);
+    }
+    
+    
+
 }
