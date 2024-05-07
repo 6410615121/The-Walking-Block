@@ -104,6 +104,23 @@ public class GameServer {
             }
         }
 
+        private void sentPlayersToClient(){
+            if(this.outObject == null){
+                try {
+                    this.outObject = new ObjectOutputStream(clientSocket.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                outObject.writeUnshared(game.getPlayers());
+            } catch (IOException e) {
+                System.err.println("Error while trying to send Board Object to client");
+                e.printStackTrace();
+            }
+        }
+
         private void sentMessageToClient(String message){
             try {
                 outData.writeUTF(message);
@@ -129,9 +146,14 @@ public class GameServer {
             // loop thread (get player > update pos > sent players)
             Thread dataExchangeThread = new Thread(()->{
                 while(true){
+                    // get player from client
                     Player newplayer = getPlayerObjectFromClient();
                     game.updatePlayerPosition(newplayer);
                     System.out.println("get new player: " + newplayer);
+
+                    // sent players to client
+                    sentPlayersToClient();
+                    System.out.println("sent players obj");
                     
                     // wait
                     try {
