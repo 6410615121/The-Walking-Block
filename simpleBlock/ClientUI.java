@@ -71,6 +71,10 @@ public class ClientUI extends JFrame implements KeyListener {
                     color = Color.RED;
                 } else if (playerColor.equalsIgnoreCase("Green")) {
                     color = Color.GREEN;
+                } else if (playerColor.equalsIgnoreCase("Yellow")) {
+                    color = Color.YELLOW;
+                } else if (playerColor.equalsIgnoreCase("Blue")) {
+                    color = Color.BLUE;
                 } else {
                     color = Color.PINK;
                 }
