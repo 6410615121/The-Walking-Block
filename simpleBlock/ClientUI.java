@@ -132,66 +132,68 @@ public class ClientUI extends JFrame implements KeyListener {
     public void keyReleased(KeyEvent e) {
     }
 
+    public static int showInputScreen(JTextField hostField, JTextField portField, JTextField userField, JTextField colorField){
+        JPanel panel = new JPanel(new GridLayout(5, 2));
+        panel.add(new JLabel("Enter server host:"));
+        panel.add(hostField);
+        panel.add(new JLabel("Enter server port:"));
+        panel.add(portField);
+        panel.add(new JLabel("Enter username:"));
+        panel.add(userField);
+        panel.add(new JLabel("Enter Color:"));
+        panel.add(colorField);
+        int result = JOptionPane.showConfirmDialog(null, panel, "User Input", JOptionPane.OK_CANCEL_OPTION);
+
+        return result;
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JTextField hostField = new JTextField(10);
-            JTextField portField = new JTextField(5);
-            JTextField usernameField = new JTextField(10);
-            JTextField colorField = new JTextField(10);
+        JTextField hostField = new JTextField(10);
+        JTextField portField = new JTextField(5);
+        JTextField usernameField = new JTextField(10);
+        JTextField colorField = new JTextField(10);
 
-            JPanel panel = new JPanel(new GridLayout(5, 2));
-            panel.add(new JLabel("Enter server host:"));
-            panel.add(hostField);
-            panel.add(new JLabel("Enter server port:"));
-            panel.add(portField);
-            panel.add(new JLabel("Enter username:"));
-            panel.add(usernameField);
-            panel.add(new JLabel("Enter Color:"));
-            panel.add(colorField);
+        if (ClientUI.showInputScreen(hostField, portField, usernameField,  colorField) == JOptionPane.OK_OPTION) {
+            String host = hostField.getText();
+            int port = Integer.parseInt(portField.getText());
+            String username = usernameField.getText();
+            String color = colorField.getText();
 
-            int result = JOptionPane.showConfirmDialog(null, panel, "User Input", JOptionPane.OK_CANCEL_OPTION);
-            if (result == JOptionPane.OK_OPTION) {
-                String host = hostField.getText();
-                int port = Integer.parseInt(portField.getText());
-                String username = usernameField.getText();
-                String color = colorField.getText();
+            try {
+                Player player = new Player(username, color, new Cell(0, 0));
+                Socket socket = new Socket(host, port);
+                Client client = new Client(player, socket);
+                client.sentPlayerObjToServer();
+                client.getBoardFromServer();
 
-                try {
-                    Player player = new Player(username, color, new Cell(0, 0));
-                    Socket socket = new Socket(host, port);
-                    Client client = new Client(player, socket);
-                    client.sentPlayerObjToServer();
-                    client.getBoardFromServer();
+                Thread UIThread = new Thread(() -> {
+                    ClientUI clientUI = new ClientUI(client);
+                    clientUI.initBoard();
 
-                    Thread UIThread = new Thread(() -> {
-                        ClientUI clientUI = new ClientUI(client);
-                        clientUI.initBoard();
+                    while (true) {
+                        clientUI.render();
+                    }
+                });
+                UIThread.start();
 
+                Thread dataExchangeThread = new Thread(() -> {
+                    try {
                         while (true) {
-                            clientUI.render();
+                            client.sentPlayerObjToServer();
+                            TimeUnit.MILLISECONDS.sleep(50);
+                            client.getPlayersFromServer();
                         }
-                    });
-                    UIThread.start();
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+                dataExchangeThread.start();
 
-                    Thread dataExchangeThread = new Thread(() -> {
-                        try {
-                            while (true) {
-                                client.sentPlayerObjToServer();
-                                TimeUnit.MILLISECONDS.sleep(50);
-                                client.getPlayersFromServer();
-                            }
-                        } catch (IOException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    dataExchangeThread.start();
-
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 }
