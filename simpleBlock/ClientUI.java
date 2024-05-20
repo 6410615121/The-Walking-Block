@@ -1,56 +1,45 @@
 package simpleBlock;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Panel;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;;
+import java.util.concurrent.TimeUnit;
 
-public class ClientUI extends JFrame implements KeyListener{
+public class ClientUI extends JFrame implements KeyListener {
     private Client client;
     private List<Player> prev_players;
     private JPanel[][] cellPanel;
-    
 
-    public ClientUI(Client client){
+    public ClientUI(Client client) {
         this.client = client;
         prev_players = client.getPlayers();
         initFrame();
     }
 
-    private void initFrame(){
+    private void initFrame() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         addKeyListener(this);
         setSize(400, 400);
-        // setLayout(new GridLayout(40, 40));
         setVisible(true);
     }
 
-    public void initBoard(){
-        // layout
+    public void initBoard() {
         int row_size = client.getBoard().ROW_SIZE;
         int col_size = client.getBoard().COL_SIZE;
         setLayout(new GridLayout(row_size, col_size));
 
-        // cell panel
         cellPanel = new JPanel[row_size][col_size];
-        for(int i = 0; i < row_size; i++){
-            for(int j = 0; j < col_size; j++){
+        for (int i = 0; i < row_size; i++) {
+            for (int j = 0; j < col_size; j++) {
                 JPanel panel = new JPanel();
                 panel.setBackground(Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 add(panel);
-                
                 cellPanel[i][j] = panel;
             }
         }
@@ -65,66 +54,52 @@ public class ClientUI extends JFrame implements KeyListener{
         }
         return null;
     }
-    
 
-    public void render(){
+    public void render() {
         List<Player> new_players = client.getPlayers();
-
-    
-        try{
+        try {
             for (Player newplayer : new_players) {
                 Cell new_pos_cell = newplayer.getPositionCell();
                 Player prevPlayer = getPlayerFromPlayers(newplayer, prev_players);
                 Cell old_pos_cell = prevPlayer.getPositionCell();
 
-                System.out.println("(newplayer.isSamePos(prevPlayer)): " + (newplayer.isSamePos(prevPlayer)));
-    
-                System.out.println("old_pos_cell: " + old_pos_cell);
-                System.out.println("new_pos_cell: " + new_pos_cell);
-
                 Color color;
                 String playerColor = newplayer.getColor();
-                if(playerColor.equalsIgnoreCase("Black")){
+                if (playerColor.equalsIgnoreCase("Black")) {
                     color = Color.BLACK;
-                }else if (playerColor.equalsIgnoreCase("Red")){
+                } else if (playerColor.equalsIgnoreCase("Red")) {
                     color = Color.RED;
-                }else if(playerColor.equalsIgnoreCase("Green")){
+                } else if (playerColor.equalsIgnoreCase("Green")) {
                     color = Color.GREEN;
-                }
-                else{
+                } else {
                     color = Color.PINK;
                 }
-    
-                if(!old_pos_cell.equals(new_pos_cell)){
+
+                if (!old_pos_cell.equals(new_pos_cell)) {
                     cellPanel[old_pos_cell.getRow()][old_pos_cell.getCol()].setBackground(Color.WHITE);
                     cellPanel[new_pos_cell.getRow()][new_pos_cell.getCol()].setBackground(color);
                 } else {
                     cellPanel[new_pos_cell.getRow()][new_pos_cell.getCol()].setBackground(color);
                 }
             }
-    
-            // Update prev_players only after rendering all new players
+
             this.prev_players = new_players;
             TimeUnit.MILLISECONDS.sleep(50);
-        } catch(InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch(NullPointerException e){
-            System.out.println("No new_players yet");
+        } catch (NullPointerException e) {
             this.prev_players = new_players;
         }
     }
-    
 
-    public void clearBoard(){
-        for(int i = 0; i < cellPanel.length; i++){
-            for(int j = 0; j < cellPanel[0].length; j++){
+    public void clearBoard() {
+        for (int i = 0; i < cellPanel.length; i++) {
+            for (int j = 0; j < cellPanel[0].length; j++) {
                 JPanel panel = cellPanel[i][j];
                 panel.setBackground(Color.WHITE);
             }
         }
-
     }
-
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -133,7 +108,6 @@ public class ClientUI extends JFrame implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-
         switch (keyCode) {
             case KeyEvent.VK_UP:
                 client.playerMove("up");
@@ -148,7 +122,6 @@ public class ClientUI extends JFrame implements KeyListener{
                 client.playerMove("right");
                 break;
             default:
-                // Handle other key presses if needed
                 System.out.println("Press!");
                 break;
         }
@@ -158,81 +131,68 @@ public class ClientUI extends JFrame implements KeyListener{
     public void keyReleased(KeyEvent e) {
     }
 
+    public static int showInputScreen(JTextField hostField, JTextField portField, JTextField userField, JTextField colorField){
+        JPanel panel = new JPanel(new GridLayout(5, 2));
+        panel.add(new JLabel("Enter server host:"));
+        panel.add(hostField);
+        panel.add(new JLabel("Enter server port:"));
+        panel.add(portField);
+        panel.add(new JLabel("Enter username:"));
+        panel.add(userField);
+        panel.add(new JLabel("Enter Color:"));
+        panel.add(colorField);
+        int result = JOptionPane.showConfirmDialog(null, panel, "User Input", JOptionPane.OK_CANCEL_OPTION);
+
+        return result;
+    }
+
     public static void main(String[] args) {
-        try {
-            System.out.println();
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter username: ");
-            String username = scanner.nextLine();
+        JTextField hostField = new JTextField(10);
+        JTextField portField = new JTextField(5);
+        JTextField usernameField = new JTextField(10);
+        JTextField colorField = new JTextField(10);
 
-            System.out.print("Enter Color: ");
-            String color = scanner.nextLine();
+        if (ClientUI.showInputScreen(hostField, portField, usernameField,  colorField) == JOptionPane.OK_OPTION) {
+            String host = hostField.getText();
+            int port = Integer.parseInt(portField.getText());
+            String username = usernameField.getText();
+            String color = colorField.getText();
 
-            Player player = new Player(username, color, new Cell(0, 0));
-            Socket socket = new Socket("localhost", 12345);
-            System.out.println("connected");
+            try {
+                Player player = new Player(username, color, new Cell(0, 0));
+                Socket socket = new Socket(host, port);
+                Client client = new Client(player, socket);
+                client.sentPlayerObjToServer();
+                client.getBoardFromServer();
 
-            Client client = new Client(player, socket);
-            System.out.println("created client");
+                Thread UIThread = new Thread(() -> {
+                    ClientUI clientUI = new ClientUI(client);
+                    clientUI.initBoard();
 
-            // send player
-            client.sentPlayerObjToServer();
-            System.out.println("sent player");
-
-            // get board
-            client.getBoardFromServer();
-            System.out.println("got board");
-
-            // UI thread
-            Thread UIThread = new Thread(() -> {
-                ClientUI clientUI = new ClientUI(client);
-                System.out.println("get UI");
-
-                clientUI.initBoard();
-                System.out.println("set board");
-
-                // loop render screen thread
-                while(true){
-                    clientUI.render();
-                }
-                
-            });
-            UIThread.start();
-
-            // loop thread
-            Thread dataExchangeThread = new Thread(() ->{
-                try {
-                    while(true){
-
-                        // sent player obj to server
-                        client.sentPlayerObjToServer();
-                        System.out.println("sent player obj");
-
-                        TimeUnit.MILLISECONDS.sleep(50);
-
-                        // recieve players from server
-                        client.getPlayersFromServer();
-                        // System.out.println("client's players: " + client.getPlayers());
-                        System.out.println("got players obj");
+                    while (true) {
+                        clientUI.render();
                     }
-                    
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            dataExchangeThread.start();
+                });
+                UIThread.start();
 
+                Thread dataExchangeThread = new Thread(() -> {
+                    try {
+                        while (true) {
+                            client.sentPlayerObjToServer();
+                            TimeUnit.MILLISECONDS.sleep(50);
+                            client.getPlayersFromServer();
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+                dataExchangeThread.start();
 
-
-
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        
     }
 }
