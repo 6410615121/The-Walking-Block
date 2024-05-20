@@ -88,7 +88,6 @@ public class ClientUI extends JFrame implements KeyListener {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            System.out.println("No new_players yet");
             this.prev_players = new_players;
         }
     }
